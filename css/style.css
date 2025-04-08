@@ -54,6 +54,11 @@ p {
     width: 200px;
 }
 
+.photographer_section a {
+    text-decoration: none;
+    color: #000;
+}
+
 .portrait {
     width: 200px; 
     height: 200px;

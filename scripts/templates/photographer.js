@@ -1,39 +1,35 @@
-function photographerTemplate(data) {
-    const { name, portrait, id, city, country, tagline, price } = data;
-    console.log(data)
+export class photographerTemplate {
 
-    const picture = `assets/photographers/${portrait}`;
+    /**
+     * 
+     * @param {Object} photographer
+     */
 
-    function getUserCardDOM() {
-        const article = document.createElement( 'article' );
-        const img = document.createElement( 'img' );
-        const link = document.createElement('a');
-        const div = document.createElement("div");
-        const divInfo = document.createElement("div");
-        const pCity = document.createElement("p");
-        const pTagLine = document.createElement("p");
-        const pPrice = document.createElement("p");
-        div.classList.add("portrait");
-        img.setAttribute("src", picture);
-        img.setAttribute("alt", name);
-        divInfo.classList.add("info");
-        pCity.classList.add("city");
-        pTagLine.classList.add("tagline");
-        pPrice.classList.add("price");
-        const h2 = document.createElement( 'h2' );
-        h2.textContent = name;
-        pCity.textContent = city + ", " + country;
-        pTagLine.textContent = tagline;
-        pPrice.textContent = price + "€/jour";
-        div.appendChild(img);
-        link.appendChild(div);
-        link.appendChild(h2);
-        divInfo.appendChild(pCity);
-        divInfo.appendChild(pTagLine);
-        divInfo.appendChild(pPrice);
-        article.appendChild(link);
-        article.appendChild(divInfo)
-        return (article);
+    constructor(photographer) {
+        this._photographer = photographer;
     }
-    return { name, picture, getUserCardDOM }
+
+    getUserCardDOM() {
+        const article = document.createElement( 'article' );
+        const link = document.createElement('a');
+        link.href = `photographer.html?id=${this._photographer.id}`;
+        link.setAttribute('role', 'link');
+        link.setAttribute('aria-label', `Voir le profil du photographe ${this._photographer.name}`);
+        
+        link.innerHTML = `
+            <div class="portrait">
+                <img src="./assets/photographers/${this._photographer.portrait}" alt="${this._photographer.name}">
+            </div>
+            <h2>${this._photographer.name}</h2>
+        <div class="info">
+            <p class="city">${this._photographer.city}, ${this._photographer.country}</p>
+            <p class="tagline">${this._photographer.tagline}</p>
+            <p class="price">${this._photographer.price} €/jour</p>
+        `
+        
+        article.appendChild(link)
+        
+
+        return article
+    }
 }
