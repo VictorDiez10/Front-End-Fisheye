@@ -22,7 +22,7 @@ export class ImageMediaCard extends MediaTemplate {
                 <div class="card-body">
                     <span class="card-title">${this.media.title}</span>
                     <div class="card-likes">
-                        <span class="likes">${this.media.likes} likes</span>
+                        <span class="likes"><i class="fa-solid fa-heart"></i>${this.media.likes} likes</span>
                 
                     </div>
                 </div>
@@ -43,7 +43,7 @@ export class VideoMediaCard extends MediaTemplate {
                 <div class="card-body">
                     <span class="card-title">${this.media.title}</span>
                     <div class="card-likes">
-                        <span class="likes">${this.media.likes} likes</span>
+                        <span class="likes"><i class="fa-solid fa-heart"></i>${this.media.likes} likes</span>
                     
                     </div>
                 </div>
