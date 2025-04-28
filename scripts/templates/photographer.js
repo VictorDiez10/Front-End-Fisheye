@@ -44,7 +44,7 @@ export class photographerTemplate {
             <button class="contact_button">Contactez-moi</button>
             <img src="./assets/photographers/${this._photographer.portrait}" alt="${this._photographer.name}" class="photographer-picture" role="img">
             <div class="content-price-likes">
-                <div class="content-likes">${this._photographer.price}</div>
+                <div class="content-likes"><i class="fa-solid fa-heart"></i>${this._photographer.price}</div>
                 <div class="content-price">${this._photographer.price}€/jour</div>
             </div>
         `

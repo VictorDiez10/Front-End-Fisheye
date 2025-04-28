@@ -4,6 +4,7 @@ import { MediaModel } from "../models/mediaModel.js"
 import { photographerModel } from "../models/photographerModel.js";
 import { photographerTemplate } from "../templates/photographer.js";
 import { MediaFactory } from "../factories/mediaFactory.js";
+import { currentImage } from "./lightBox.js";
 
 export class mediaPhotographer {
     constructor() {
@@ -13,7 +14,7 @@ export class mediaPhotographer {
         this.$photographerWrapper = document.querySelector(".photograph-header")
     }
 
-    async mediaDisplay() {
+    async fetchMedia() {
         try {
             const params = window.location.search;
             const searchParams = new URLSearchParams(params) 
@@ -34,17 +35,8 @@ export class mediaPhotographer {
                 }
 
                 const photographerMedia = mediaData.filter(media => media.photographerId === photographerIDNumber)
-        
-                photographerMedia
-                .map(data => new MediaModel(data))
-                .map(media => {
-                    const mediaCard = MediaFactory.createMediaCard(media, photographer.name);
-                    mediaCard.photographerName = photographer.name.split(" ")[0];
-                    return mediaCard;
-                })
-                .forEach(template => {
-                    this.$mediaWrapper.appendChild(template.createMediaCard())
-                });
+                displayMedia(photographerMedia, photographer)
+                
         }} catch (error) {
             console.error("Une erreur est apparu", error)
         }
@@ -55,5 +47,21 @@ export class mediaPhotographer {
         
 }
 
+function displayMedia(photographerMedia, photographer) {
+    const mediaWrapper = document.querySelector(".media_section");
+    photographerMedia
+    .map(data => new MediaModel(data))
+    .forEach((media, index) => {
+        const mediaCard = MediaFactory.createMediaCard(media, photographer.name);
+        mediaCard.photographerName = photographer.name.split(" ")[0];
+        const mediaElement = mediaCard.createMediaCard();
+        mediaElement.setAttribute('data-index', index);
+        mediaElement.addEventListener("click", (event)=> {
+            currentImage(event)
+        })
+        mediaWrapper.appendChild(mediaElement);
+    });
+}
+
 const app = new mediaPhotographer();
-app.mediaDisplay();
+app.fetchMedia();
