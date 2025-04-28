@@ -1,5 +1,4 @@
 import { displayModal } from "../utils/contactForm.js"
-// import { closeModal } from "../utils/contactForm.js";
 
 export class photographerTemplate {
 
@@ -42,13 +41,19 @@ export class photographerTemplate {
                 <p class="content-country">${this._photographer.city}, ${this._photographer.country}</p>
                 <p class="content-citation">${this._photographer.tagline}</p>
             </div>
-            <button class="contact_button" onclick="${displayModal()}">Contactez-moi</button>
+            <button class="contact_button">Contactez-moi</button>
             <img src="./assets/photographers/${this._photographer.portrait}" alt="${this._photographer.name}" class="photographer-picture" role="img">
             <div class="content-price-likes">
                 <div class="content-likes">${this._photographer.price}</div>
                 <div class="content-price">${this._photographer.price}€/jour</div>
             </div>
         `
+
+        const buttonOpener = card.querySelector('.contact_button');
+    buttonOpener.addEventListener('click', () => {
+        displayModal(); // ici ça fonctionne car displayModal est dans le même scope JS
+    });
+
         return card
     }
 }
