@@ -42,9 +42,6 @@ export class mediaPhotographer {
         }
     }
 
-        
-
-        
 }
 
 function displayMedia(photographerMedia, photographer) {

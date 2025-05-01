@@ -5,6 +5,8 @@ const lightBoxContent = document.createElement("div");
 const lightBoxImg = document.createElement("img");
 const lightBoxPrev = document.createElement("div");
 const lightBoxNext = document.createElement("div");
+const lightBoxVideo = document.createElement("video");
+const sourceVideo = document.createElement("source");
 
 // Ajout des classes
 lightBoxContainer.classList.add("lightbox");
@@ -17,6 +19,7 @@ lightBoxContent.appendChild(lightBoxImg);
 lightBoxContent.appendChild(lightBoxPrev);
 lightBoxContent.appendChild(lightBoxNext);
 lightBoxContainer.appendChild(lightBoxContent);
+lightBoxVideo.appendChild(sourceVideo);
 document.body.appendChild(lightBoxContainer);
 
 
@@ -40,10 +43,19 @@ function showLightBox(n) {
     // Récupérer l'URL de l'image à partir de l'élément .card
     const imageElement = galleryItems[index].querySelector("img");
     if (imageElement) {
+        if(lightBoxContent.querySelector("video")) {
+            lightBoxContent.replaceChild(lightBoxImg, lightBoxVideo);
+        }
         const imageLocation = imageElement.getAttribute("src");
         lightBoxImg.setAttribute("src", imageLocation);
     } else {
-        console.error("Aucune image trouvée dans galleryItems[index]");
+        const videoElement = galleryItems[index].querySelector("video source") 
+        if (lightBoxContent.querySelector("img")) {
+            lightBoxContent.replaceChild(lightBoxVideo, lightBoxImg);
+        } else {
+            lightBoxContent.appendChild(lightBoxVideo)
+        }
+        sourceVideo.setAttribute("src", videoElement.getAttribute("src"))
     }
 }
 

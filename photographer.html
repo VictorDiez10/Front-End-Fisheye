@@ -27,11 +27,28 @@
           <h2>Contactez-moi</h2>
           <img src="assets/icons/close.svg" class="close" />
         </header>
-				<form>
-					<div>
-						<label for="prenom">Prénom</label>
-						<input />
-            <label for="prenom"></label>
+				<form id="form">
+					<div >
+<div class="formData">
+						<label for="first">Prénom</label>
+						<input id="first" name="first" type="text"/><br>
+            <small class="error"></small>
+          </div>
+          <div class="formData">
+            <label for="last">Nom</label>
+            <input type="text" id="last" name="last"><br>
+            <small class="error"></small>
+          </div>
+          <div class="formData">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" /><br>
+            <small class="error"></small>
+            </div>
+            <div class="formData">
+            <label for="message">Message</label>
+            <textarea id="message" name="message"></textarea><br>
+            <small class="error"></small>
+          </div>
 					</div>
           <button class="contact_button">Envoyer</button>
 				</form>

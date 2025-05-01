@@ -51,9 +51,8 @@ export class photographerTemplate {
 
         const buttonOpener = card.querySelector('.contact_button');
     buttonOpener.addEventListener('click', () => {
-        displayModal(); // ici ça fonctionne car displayModal est dans le même scope JS
+        displayModal();
     });
-
         return card
     }
 }
