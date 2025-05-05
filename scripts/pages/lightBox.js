@@ -7,6 +7,7 @@ const lightBoxPrev = document.createElement("div");
 const lightBoxNext = document.createElement("div");
 const lightBoxVideo = document.createElement("video");
 const sourceVideo = document.createElement("source");
+console.log(galleryItems)
 
 // Ajout des classes
 lightBoxContainer.classList.add("lightbox");
@@ -42,6 +43,7 @@ function showLightBox(n) {
 
     // Récupérer l'URL de l'image à partir de l'élément .card
     const imageElement = galleryItems[index].querySelector("img");
+    console.log(imageElement)
     if (imageElement) {
         if(lightBoxContent.querySelector("video")) {
             lightBoxContent.replaceChild(lightBoxImg, lightBoxVideo);
@@ -63,6 +65,7 @@ function showLightBox(n) {
 export function currentImage(event) {
     lightBoxContainer.style.display = "block";
     const imageIndex = parseInt(event.currentTarget.getAttribute("data-index"));
+    console.log(imageIndex)
     showLightBox(imageIndex);
 }
 

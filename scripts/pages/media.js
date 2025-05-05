@@ -6,6 +6,11 @@ import { photographerTemplate } from "../templates/photographer.js";
 import { MediaFactory } from "../factories/mediaFactory.js";
 import { currentImage } from "./lightBox.js";
 
+
+function updateTotalLikes(mediaList) {
+    const totalLikes = mediaList.reduce((sum, media) => sum + media.likes, 0);
+    document.getElementById('total-likes').textContent = totalLikes;
+}
 export class mediaPhotographer {
     constructor() {
         this.$mediaWrapper = document.querySelector(".media_section")
@@ -36,6 +41,7 @@ export class mediaPhotographer {
 
                 const photographerMedia = mediaData.filter(media => media.photographerId === photographerIDNumber)
                 displayMedia(photographerMedia, photographer)
+                updateTotalLikes(photographerMedia);
                 
         }} catch (error) {
             console.error("Une erreur est apparu", error)
@@ -44,7 +50,9 @@ export class mediaPhotographer {
 
 }
 
+
 function displayMedia(photographerMedia, photographer) {
+    
     const mediaWrapper = document.querySelector(".media_section");
     photographerMedia
     .map(data => new MediaModel(data))
@@ -52,10 +60,43 @@ function displayMedia(photographerMedia, photographer) {
         const mediaCard = MediaFactory.createMediaCard(media, photographer.name);
         mediaCard.photographerName = photographer.name.split(" ")[0];
         const mediaElement = mediaCard.createMediaCard();
-        mediaElement.setAttribute('data-index', index);
-        mediaElement.addEventListener("click", (event)=> {
+        console.log(mediaElement)
+        mediaElement.querySelector('.card').setAttribute('data-index', index);
+        mediaElement.querySelector('.card').addEventListener("click", (event)=> {
             currentImage(event)
-        })
+        });
+        const likeIcon = mediaElement.querySelector('.like-icon');
+
+        const toggleLike = (event) => {
+            const likeWrapper = event.currentTarget.closest('.likes');
+            const likeCount = likeWrapper.querySelector('.likes-count');
+            const liked = likeWrapper.getAttribute('data-liked') === 'true';
+
+            let currentLikes = parseInt(likeCount.textContent);
+            const totalLikesEl = document.querySelector('#total-likes');
+
+            if (!liked) {
+                likeCount.textContent = currentLikes + 1;
+                totalLikesEl.textContent = parseInt(totalLikesEl.textContent) + 1;
+                likeWrapper.setAttribute('data-liked', 'true');
+            } else {
+                likeCount.textContent = currentLikes - 1;
+                totalLikesEl.textContent = parseInt(totalLikesEl.textContent) - 1;
+                likeWrapper.setAttribute('data-liked', 'false');
+            }
+        };
+
+likeIcon.addEventListener('click', toggleLike);
+
+likeIcon.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
+        e.preventDefault(); // évite de scroller si on appuie sur espace
+        toggleLike(e);
+    }
+});
+
+        
+        
         mediaWrapper.appendChild(mediaElement);
     });
 }
