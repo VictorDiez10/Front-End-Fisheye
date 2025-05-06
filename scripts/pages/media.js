@@ -11,6 +11,52 @@ function updateTotalLikes(mediaList) {
     const totalLikes = mediaList.reduce((sum, media) => sum + media.likes, 0);
     document.getElementById('total-likes').textContent = totalLikes;
 }
+
+function insertSortDropdown() {
+    const dropdownWrapper = document.createElement('div');
+    dropdownWrapper.className = 'sort-wrapper';
+    dropdownWrapper.innerHTML = `
+        <label for="sort-select" class="sort-label">Trier par</label>
+        <select id="sort-select" aria-label="Trier les médias" class="sort-select">
+            <option value="popularite">Popularité</option>
+            <option value="date">Date</option>
+            <option value="titre">Titre</option>
+        </select>
+    `;
+
+    const header = document.querySelector('.photograph-header');
+    header.insertAdjacentElement('afterend', dropdownWrapper);
+}
+
+function setupSorting(mediaList, photographer) {
+    const select = document.getElementById('sort-select');
+    const mediaWrapper = document.querySelector(".media_section");
+
+    const sortAndDisplay = () => {
+        const value = select.value;
+        let sorted = [...mediaList];
+
+        switch (value) {
+            case 'popularite':
+                sorted.sort((a, b) => b.likes - a.likes);
+                break;
+            case 'date':
+                sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'titre':
+                sorted.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+        }
+
+        mediaWrapper.innerHTML = '';
+        displayMedia(sorted, photographer);
+    };
+
+    select.addEventListener('change', sortAndDisplay);
+    sortAndDisplay();
+}
+
+
 export class mediaPhotographer {
     constructor() {
         this.$mediaWrapper = document.querySelector(".media_section")
@@ -33,6 +79,8 @@ export class mediaPhotographer {
                 const photographerModelInstance = new photographerModel(photographer);
             const photographerTemplateInstance = new photographerTemplate(photographerModelInstance);
             this.$photographerWrapper.appendChild(photographerTemplateInstance.getUserInfo());
+            insertSortDropdown();
+
 
                 const mediaData = await this.mediaApi.getMedia();
                 if (!Array.isArray(mediaData)) {
@@ -40,7 +88,8 @@ export class mediaPhotographer {
                 }
 
                 const photographerMedia = mediaData.filter(media => media.photographerId === photographerIDNumber)
-                displayMedia(photographerMedia, photographer)
+                displayMedia(photographerMedia, photographer);
+                setupSorting(photographerMedia, photographer);
                 updateTotalLikes(photographerMedia);
                 
         }} catch (error) {

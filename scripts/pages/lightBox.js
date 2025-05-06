@@ -7,6 +7,9 @@ const lightBoxPrev = document.createElement("div");
 const lightBoxNext = document.createElement("div");
 const lightBoxVideo = document.createElement("video");
 const sourceVideo = document.createElement("source");
+const lightBoxClose = document.createElement("button"); // ligne 7
+
+
 console.log(galleryItems)
 
 // Ajout des classes
@@ -14,9 +17,13 @@ lightBoxContainer.classList.add("lightbox");
 lightBoxContent.classList.add("lightbox-content");
 lightBoxPrev.classList.add("fa", "fa-angle-left", "lightbox-prev");
 lightBoxNext.classList.add("fa", "fa-angle-right", "lightbox-next");
+lightBoxClose.classList.add("lightbox-close");
+lightBoxClose.setAttribute("aria-label", "Fermer la lightbox");
+lightBoxClose.innerHTML = "&times;";
 
 // Construction de la lightbox
 lightBoxContent.appendChild(lightBoxImg);
+lightBoxContent.appendChild(lightBoxClose); // ligne 19
 lightBoxContent.appendChild(lightBoxPrev);
 lightBoxContent.appendChild(lightBoxNext);
 lightBoxContainer.appendChild(lightBoxContent);
@@ -50,6 +57,8 @@ function showLightBox(n) {
         }
         const imageLocation = imageElement.getAttribute("src");
         lightBoxImg.setAttribute("src", imageLocation);
+        lightBoxImg.setAttribute("src", imageLocation);
+        lightBoxImg.setAttribute("tabindex", "0"); // ligne 47
     } else {
         const videoElement = galleryItems[index].querySelector("video source") 
         if (lightBoxContent.querySelector("img")) {
@@ -58,6 +67,10 @@ function showLightBox(n) {
             lightBoxContent.appendChild(lightBoxVideo)
         }
         sourceVideo.setAttribute("src", videoElement.getAttribute("src"))
+        sourceVideo.setAttribute("src", videoElement.getAttribute("src")); // ligne 54
+    lightBoxVideo.setAttribute("controls", ""); // ligne 55
+    lightBoxVideo.setAttribute("tabindex", "0"); // ligne 56
+
     }
 }
 
@@ -75,6 +88,11 @@ for (let i = 0; i < galleryItems.length; i++) {
     console.log(galleryItems[i])
     galleryItems[i].addEventListener("click", currentImage);
 }
+
+lightBoxClose.addEventListener("click", () => { // ligne 84
+    lightBoxContainer.style.display = "none";
+});
+
 
 // Naviguer entre les images
 function sliderImage(n) {

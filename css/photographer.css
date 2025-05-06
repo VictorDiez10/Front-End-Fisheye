@@ -146,7 +146,7 @@ form input {
     display: grid;
     grid-template-columns: repeat(3, 1fr) ;
     gap: 100px;
-    margin: 100px 100px;
+    margin: 75px 100px;
     justify-items: center;
 }
 
@@ -215,3 +215,21 @@ form input {
 .lightbox-next {
     right: 0;
 }
+
+/* Style pour la croix */
+.lightbox-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 32px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.lightbox-close:focus {
+    outline: 2px solid white;
+}
+
