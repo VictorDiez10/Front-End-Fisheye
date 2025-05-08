@@ -114,6 +114,15 @@ function displayMedia(photographerMedia, photographer) {
         mediaElement.querySelector('.card').addEventListener("click", (event)=> {
             currentImage(event)
         });
+        const cardElement = mediaElement.querySelector('.card');
+        cardElement.setAttribute('tabindex', '0'); 
+        cardElement.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter' || e.keyCode === 13) {
+        e.preventDefault();
+        currentImage({ currentTarget: cardElement }); 
+    }
+});
+
         const likeIcon = mediaElement.querySelector('.like-icon');
 
         const toggleLike = (event) => {
@@ -139,13 +148,10 @@ likeIcon.addEventListener('click', toggleLike);
 
 likeIcon.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
-        e.preventDefault(); // évite de scroller si on appuie sur espace
+        e.preventDefault(); 
         toggleLike(e);
     }
 });
-
-        
-        
         mediaWrapper.appendChild(mediaElement);
     });
 }

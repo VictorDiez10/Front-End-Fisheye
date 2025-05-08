@@ -7,23 +7,27 @@ const lightBoxPrev = document.createElement("div");
 const lightBoxNext = document.createElement("div");
 const lightBoxVideo = document.createElement("video");
 const sourceVideo = document.createElement("source");
-const lightBoxClose = document.createElement("button"); // ligne 7
-
-
-console.log(galleryItems)
+const lightBoxDiv = document.createElement("div");
+const lightBoxClose = document.createElement("button");
 
 // Ajout des classes
 lightBoxContainer.classList.add("lightbox");
+lightBoxContainer.setAttribute("role", "dialog");
+lightBoxContainer.setAttribute("aria-label", "Galerie d’images et vidéos");
 lightBoxContent.classList.add("lightbox-content");
 lightBoxPrev.classList.add("fa", "fa-angle-left", "lightbox-prev");
 lightBoxNext.classList.add("fa", "fa-angle-right", "lightbox-next");
+lightBoxDiv.classList.add("lightbox-img");
 lightBoxClose.classList.add("lightbox-close");
 lightBoxClose.setAttribute("aria-label", "Fermer la lightbox");
+lightBoxClose.setAttribute("tabindex", "0");
 lightBoxClose.innerHTML = "&times;";
+lightBoxVideo.setAttribute("controls", true);
 
 // Construction de la lightbox
-lightBoxContent.appendChild(lightBoxImg);
-lightBoxContent.appendChild(lightBoxClose); // ligne 19
+lightBoxDiv.appendChild(lightBoxImg);
+lightBoxContent.appendChild(lightBoxDiv);
+lightBoxContent.appendChild(lightBoxClose);
 lightBoxContent.appendChild(lightBoxPrev);
 lightBoxContent.appendChild(lightBoxNext);
 lightBoxContainer.appendChild(lightBoxContent);
@@ -50,27 +54,20 @@ function showLightBox(n) {
 
     // Récupérer l'URL de l'image à partir de l'élément .card
     const imageElement = galleryItems[index].querySelector("img");
-    console.log(imageElement)
     if (imageElement) {
-        if(lightBoxContent.querySelector("video")) {
-            lightBoxContent.replaceChild(lightBoxImg, lightBoxVideo);
-        }
+        if (lightBoxDiv.contains(lightBoxVideo)) {
+            lightBoxDiv.replaceChild(lightBoxImg, lightBoxVideo);
+        }        
         const imageLocation = imageElement.getAttribute("src");
         lightBoxImg.setAttribute("src", imageLocation);
-        lightBoxImg.setAttribute("src", imageLocation);
-        lightBoxImg.setAttribute("tabindex", "0"); // ligne 47
     } else {
         const videoElement = galleryItems[index].querySelector("video source") 
-        if (lightBoxContent.querySelector("img")) {
-            lightBoxContent.replaceChild(lightBoxVideo, lightBoxImg);
+        if (lightBoxDiv.contains(lightBoxImg)) {
+            lightBoxDiv.replaceChild(lightBoxVideo, lightBoxImg);
         } else {
-            lightBoxContent.appendChild(lightBoxVideo)
-        }
+            lightBoxDiv.appendChild(lightBoxVideo);
+        }        
         sourceVideo.setAttribute("src", videoElement.getAttribute("src"))
-        sourceVideo.setAttribute("src", videoElement.getAttribute("src")); // ligne 54
-    lightBoxVideo.setAttribute("controls", ""); // ligne 55
-    lightBoxVideo.setAttribute("tabindex", "0"); // ligne 56
-
     }
 }
 
@@ -78,7 +75,6 @@ function showLightBox(n) {
 export function currentImage(event) {
     lightBoxContainer.style.display = "block";
     const imageIndex = parseInt(event.currentTarget.getAttribute("data-index"));
-    console.log(imageIndex)
     showLightBox(imageIndex);
 }
 
@@ -89,8 +85,23 @@ for (let i = 0; i < galleryItems.length; i++) {
     galleryItems[i].addEventListener("click", currentImage);
 }
 
-lightBoxClose.addEventListener("click", () => { // ligne 84
-    lightBoxContainer.style.display = "none";
+document.addEventListener("keydown", (e) => {
+    if (lightBoxContainer.style.display !== "block") return;
+
+    switch (e.key) {
+        case "Escape":
+            lightBoxContainer.style.display = "none";
+            if (!lightBoxVideo.paused) lightBoxVideo.pause();
+            break;
+        case "ArrowRight":
+            nextImage();
+            break;
+        case "ArrowLeft":
+            prevImage();
+            break;
+        default:
+            break;
+    }
 });
 
 
@@ -108,13 +119,15 @@ function nextImage() {
 }
 
 // Fermer la lightbox en cliquant à l'extérieur
-function closeLightBox(event) {
-    if (event.target === lightBoxContainer) {
-        lightBoxContainer.style.display = "none";
+lightBoxClose.addEventListener("click", () => {
+    lightBoxContainer.style.display = "none";
+
+    // Stoppe la vidéo si nécessaire
+    if (!lightBoxVideo.paused) {
+        lightBoxVideo.pause();
     }
-}
+});
 
 // Ajouter des écouteurs d'événements pour la navigation et la fermeture
 lightBoxPrev.addEventListener("click", prevImage);
 lightBoxNext.addEventListener("click", nextImage);
-lightBoxContainer.addEventListener("click", closeLightBox);
