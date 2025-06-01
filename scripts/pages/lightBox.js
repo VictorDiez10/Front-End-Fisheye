@@ -23,6 +23,7 @@ lightBoxClose.setAttribute("aria-label", "Fermer la lightbox");
 lightBoxClose.setAttribute("tabindex", "0");
 lightBoxClose.innerHTML = "&times;";
 lightBoxVideo.setAttribute("controls", true);
+lightBoxImg.setAttribute("alt", "Lighbox-vide")
 
 // Construction de la lightbox
 lightBoxDiv.appendChild(lightBoxImg);
@@ -52,24 +53,42 @@ function showLightBox(n) {
         index = n;
     }
 
-    // Récupérer l'URL de l'image à partir de l'élément .card
-    const imageElement = galleryItems[index].querySelector("img");
+    // Récupérer l'élément de la galerie
+    const galleryItem = galleryItems[index];
+    const imageElement = galleryItem.querySelector("img");
+    const titleImageElement = galleryItem.querySelector("img"); // Adapter si nécessaire
+
+    // Récupérer le texte descriptif
+    
+    
+
     if (imageElement) {
         if (lightBoxDiv.contains(lightBoxVideo)) {
             lightBoxDiv.replaceChild(lightBoxImg, lightBoxVideo);
-        }        
+        }
+
+        const mediaImageAlt = titleImageElement.getAttribute("alt");
         const imageLocation = imageElement.getAttribute("src");
         lightBoxImg.setAttribute("src", imageLocation);
+        lightBoxImg.setAttribute("alt", mediaImageAlt); // ✅ Ajout de l'alt
     } else {
-        const videoElement = galleryItems[index].querySelector("video source") 
+        const videoElement = galleryItem.querySelector("video source");
+        const mediaVideoAlt = videoElement.getAttribute("alt");
+
         if (lightBoxDiv.contains(lightBoxImg)) {
             lightBoxDiv.replaceChild(lightBoxVideo, lightBoxImg);
-        } else {
+        } else if (!lightBoxDiv.contains(lightBoxVideo)) {
             lightBoxDiv.appendChild(lightBoxVideo);
-        }        
-        sourceVideo.setAttribute("src", videoElement.getAttribute("src"))
+        }
+
+        const videoSrc = videoElement.getAttribute("src");
+        sourceVideo.setAttribute("src", videoSrc);
+        lightBoxVideo.setAttribute("aria-label", mediaVideoAlt); // ✅ Ajout de l'aria-label
+
+        lightBoxVideo.load(); // Important pour mettre à jour la source
     }
 }
+
 
 // Ouvrir la lightbox avec l'image cliquée
 export function currentImage(event) {

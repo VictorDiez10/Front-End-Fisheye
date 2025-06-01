@@ -26,7 +26,7 @@ export class ImageMediaCard extends MediaTemplate {
                     <div class="card-likes">
                         <span class="likes" data-liked="false">
                                 <span class="likes-count">${this.media.likes}</span>
-                            <i class="fa-solid fa-heart like-icon" role="button" aria-label="Liker ce média" tabindex="0"></i>
+                            <em class="fa-solid fa-heart like-icon" role="button" aria-label="Liker ce média" tabindex="0"></em>
                         </span>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ export class VideoMediaCard extends MediaTemplate {
                     <span class="card-title">${this.media.title}</span>
                     <div class="card-likes">
                         <span class="likes" data-liked="false">
-                            <i class="fa-solid fa-heart like-icon" role="button" aria-label="Liker ce média" tabindex="0"></i>
+                            <em class="fa-solid fa-heart like-icon" role="button" aria-label="Liker ce média" tabindex="0"></em>
                             <span class="likes-count">${this.media.likes}</span>
                         </span>
                     </div>

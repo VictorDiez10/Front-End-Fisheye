@@ -46,7 +46,7 @@ export class photographerTemplate {
             <div class="content-price-likes">
                 <div class="content-likes">
                     <span id="total-likes">0</span>
-                    <i class="fa-solid fa-heart"></i>
+                    <em class="fa-solid fa-heart"></em>
                 </div>
                 <div class="content-price">${this._photographer.price} € /jour</div>
             </div>
