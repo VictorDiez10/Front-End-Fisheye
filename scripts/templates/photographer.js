@@ -12,11 +12,11 @@ export class photographerTemplate {
     }
 
     getUserCardDOM() {
-        const article = document.createElement( 'article' );
-        const link = document.createElement('a');
+        const article = document.createElement( "article" );
+        const link = document.createElement("a");
         link.href = `photographer.html?id=${this._photographer.id}`;
-        link.setAttribute('role', 'link');
-        link.setAttribute('aria-label', `Voir le profil du photographe ${this._photographer.name}`);
+        link.setAttribute("role", "link");
+        link.setAttribute("aria-label", `Voir le profil du photographe ${this._photographer.name}`);
         link.innerHTML = `
             <div class="portrait">
                 <img src="./assets/photographers/${this._photographer.portrait}" alt="${this._photographer.name}">
@@ -52,8 +52,8 @@ export class photographerTemplate {
             </div>
         `
 
-        const buttonOpener = card.querySelector('.contact_button');
-    buttonOpener.addEventListener('click', () => {
+        const buttonOpener = card.querySelector(".contact_button");
+    buttonOpener.addEventListener("click", () => {
         displayModal();
     });
         return card

@@ -8,14 +8,16 @@ export class Api {
         this._url = url;
     }
 
-    async get() {
-            return fetch(this._url)
-            .then(response => response.json())
-            .catch(error => {
-                console.log('an error occurs', error);
-                return null;
-            });
-        }
+async get() {
+    try {
+        const response = await fetch(this._url);
+        return await response.json();
+    } catch (error) {
+        console.log("An error occurred", error);
+        return null;
+    }
+}
+
     
 }
 
@@ -26,7 +28,7 @@ export class PhotographerApi extends Api {
          * @param {string} url 
          */
         constructor(url) {
-        super(url);
+            super(url);
         }
     
         async getPhotographers() {

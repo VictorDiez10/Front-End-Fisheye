@@ -2,7 +2,7 @@
 <html>
   <head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/photographer.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
@@ -21,15 +21,17 @@
       </div>
       <div class="media_section"></div>
     </main>
-    <div id="contact_modal">
+    <div id="contact_modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
 			<div class="modal">
 				<header>
-          <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" class="close" />
+          <h2 id="modalTitle">Contactez-moi</h2>
+          <button class="close" aria-label="Fermer la fenêtre de contact">
+            <img src="assets/icons/close.svg" alt="close" />
+          </button>
         </header>
 				<form id="form">
-					<div >
-<div class="formData">
+					<div>
+          <div class="formData">
 						<label for="first">Prénom</label>
 						<input id="first" name="first" type="text"/><br>
             <small class="error"></small>
@@ -50,12 +52,13 @@
             <small class="error"></small>
           </div>
 					</div>
-          <button class="contact_button">Envoyer</button>
+          <button class="contact_button" type="submit">Envoyer</button>
 				</form>
 			</div>
 		</div>
     <script type="module" src="/scripts/pages/media.js"></script>
     <script type="module" src="/scripts/utils/contactForm.js"></script>
     <script type="module" src="/scripts/pages/lightBox.js"></script>
+    <script type="module" src="scripts/api/api.js"></script>
   </body>
 </html>

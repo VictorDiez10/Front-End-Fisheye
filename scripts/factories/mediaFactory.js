@@ -15,6 +15,6 @@ export class MediaFactory {
     } else if (media.video) {
         return new VideoMediaCard(media, photographerName);
     }
-    throw new Error('Unknown media type');
+    throw new Error("Unknown media type");
     }
 }

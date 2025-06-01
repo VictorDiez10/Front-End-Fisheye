@@ -1,6 +1,6 @@
-import { photographerModel } from '../models/photographerModel.js'  
-import { photographerTemplate } from '../templates/photographer.js'
-import { PhotographerApi } from '../api/api.js';
+import { photographerModel } from "../models/photographerModel.js" 
+import { photographerTemplate } from "../templates/photographer.js"
+import { PhotographerApi } from "../api/api.js";
 
     class App {
         constructor() {
@@ -12,7 +12,7 @@ import { PhotographerApi } from '../api/api.js';
             const photographersData = await this.photographerApi.getPhotographers();
 
             if (!Array.isArray(photographersData)) {
-                throw new TypeError('Expected an array of photographers');
+                throw new TypeError("Expected an array of photographers");
             }
     
             photographersData

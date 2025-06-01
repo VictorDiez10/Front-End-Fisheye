@@ -9,12 +9,12 @@ import { currentImage } from "./lightBox.js";
 
 function updateTotalLikes(mediaList) {
     const totalLikes = mediaList.reduce((sum, media) => sum + media.likes, 0);
-    document.getElementById('total-likes').textContent = totalLikes;
+    document.getElementById("total-likes").textContent = totalLikes;
 }
 
 function insertSortDropdown() {
-    const dropdownWrapper = document.createElement('div');
-    dropdownWrapper.className = 'sort-wrapper';
+    const dropdownWrapper = document.createElement("div");
+    dropdownWrapper.className = "sort-wrapper";
     dropdownWrapper.innerHTML = `
         <label for="sort-select" class="sort-label">Trier par</label>
         <select id="sort-select" aria-label="Trier les médias" class="sort-select">
@@ -24,12 +24,12 @@ function insertSortDropdown() {
         </select>
     `;
 
-    const header = document.querySelector('.photograph-header');
-    header.insertAdjacentElement('afterend', dropdownWrapper);
+    const header = document.querySelector(".photograph-header");
+    header.insertAdjacentElement("afterend", dropdownWrapper);
 }
 
 function setupSorting(mediaList, photographer) {
-    const select = document.getElementById('sort-select');
+    const select = document.getElementById("sort-select");
     const mediaWrapper = document.querySelector(".media_section");
 
     const sortAndDisplay = () => {
@@ -37,22 +37,22 @@ function setupSorting(mediaList, photographer) {
         let sorted = [...mediaList];
 
         switch (value) {
-            case 'popularite':
+            case "popularite":
                 sorted.sort((a, b) => b.likes - a.likes);
                 break;
-            case 'date':
+            case "date":
                 sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
                 break;
-            case 'titre':
+            case "titre":
                 sorted.sort((a, b) => a.title.localeCompare(b.title));
                 break;
         }
 
-        mediaWrapper.innerHTML = '';
+        mediaWrapper.innerHTML = "";
         displayMedia(sorted, photographer);
     };
 
-    select.addEventListener('change', sortAndDisplay);
+    select.addEventListener("change", sortAndDisplay);
     sortAndDisplay();
 }
 
@@ -66,36 +66,53 @@ export class mediaPhotographer {
     }
 
     async fetchMedia() {
-        try {
-            const params = window.location.search;
-            const searchParams = new URLSearchParams(params) 
-            const photographerID = searchParams.get("id")
-            const photographerIDNumber = +photographerID
+    try {
+        const params = window.location.search;
+        const searchParams = new URLSearchParams(params);
+        const photographerID = searchParams.get("id");
+        const photographerIDNumber = +photographerID;
 
-            const photographersData = await this.photographerApi.getPhotographers();
-            const photographer = photographersData.find(p => p.id === photographerIDNumber);
-            if(photographer) {
+        const photographersData = await this.photographerApi.getPhotographers();
+        const photographer = photographersData.find(p => p.id === photographerIDNumber);
 
-                const photographerModelInstance = new photographerModel(photographer);
-            const photographerTemplateInstance = new photographerTemplate(photographerModelInstance);
-            this.$photographerWrapper.appendChild(photographerTemplateInstance.getUserInfo());
-            insertSortDropdown();
-
-
-                const mediaData = await this.mediaApi.getMedia();
-                if (!Array.isArray(mediaData)) {
-                    throw new TypeError('Expected an array of media');
-                }
-
-                const photographerMedia = mediaData.filter(media => media.photographerId === photographerIDNumber)
-                displayMedia(photographerMedia, photographer);
-                setupSorting(photographerMedia, photographer);
-                updateTotalLikes(photographerMedia);
-                
-        }} catch (error) {
-            console.error("Une erreur est apparu", error)
+        if (!photographer) {
+            this.displayError("Le photographe demandé n'existe pas.");
+            return;
         }
+
+        const photographerModelInstance = new photographerModel(photographer);
+        const photographerTemplateInstance = new photographerTemplate(photographerModelInstance);
+        this.$photographerWrapper.appendChild(photographerTemplateInstance.getUserInfo());
+        insertSortDropdown();
+
+        const mediaData = await this.mediaApi.getMedia();
+        if (!Array.isArray(mediaData)) {
+            throw new TypeError("Expected an array of media");
+        }
+
+        const photographerMedia = mediaData.filter(media => media.photographerId === photographerIDNumber);
+        displayMedia(photographerMedia, photographer);
+        setupSorting(photographerMedia, photographer);
+        updateTotalLikes(photographerMedia);
+
+    } catch (error) {
+        console.error("Une erreur est apparue", error);
+        this.displayError("Une erreur est survenue lors du chargement des données.");
     }
+}
+
+displayError(message) {
+    const main = document.querySelector("main");
+    main.innerHTML = `
+        <div class="error-message" role="alert" style="text-align: center; margin-top: 2rem;">
+            <h2>${message}</h2>
+            <p>Veuillez vérifier l'URL ou revenir à la page d’accueil.</p>
+            <a href="index.html" class="btn-home" style="display:inline-block;margin-top:1rem;">Retour à l’accueil</a>
+        </div>
+    `;
+}
+
+
 
 }
 
@@ -110,44 +127,44 @@ function displayMedia(photographerMedia, photographer) {
         mediaCard.photographerName = photographer.name.split(" ")[0];
         const mediaElement = mediaCard.createMediaCard();
         console.log(mediaElement)
-        mediaElement.querySelector('.card').setAttribute('data-index', index);
-        mediaElement.querySelector('.card').addEventListener("click", (event)=> {
+        mediaElement.querySelector(".card").setAttribute("data-index", index);
+        mediaElement.querySelector(".card").addEventListener("click", (event)=> {
             currentImage(event)
         });
-        const cardElement = mediaElement.querySelector('.card');
-        cardElement.setAttribute('tabindex', '0'); 
-        cardElement.addEventListener('keydown', (e) => { 
-            if (e.key === 'Enter' || e.keyCode === 13) {
+        const cardElement = mediaElement.querySelector(".card");
+        cardElement.setAttribute("tabindex", "0"); 
+        cardElement.addEventListener("keydown", (e) => { 
+            if (e.key === "Enter" || e.keyCode === 13) {
         e.preventDefault();
         currentImage({ currentTarget: cardElement }); 
     }
 });
 
-        const likeIcon = mediaElement.querySelector('.like-icon');
+        const likeIcon = mediaElement.querySelector(".like-icon");
 
         const toggleLike = (event) => {
-            const likeWrapper = event.currentTarget.closest('.likes');
-            const likeCount = likeWrapper.querySelector('.likes-count');
-            const liked = likeWrapper.getAttribute('data-liked') === 'true';
+            const likeWrapper = event.currentTarget.closest(".likes");
+            const likeCount = likeWrapper.querySelector(".likes-count");
+            const liked = likeWrapper.getAttribute("data-liked") === "true";
 
             let currentLikes = parseInt(likeCount.textContent);
-            const totalLikesEl = document.querySelector('#total-likes');
+            const totalLikesEl = document.querySelector("#total-likes");
 
             if (!liked) {
                 likeCount.textContent = currentLikes + 1;
                 totalLikesEl.textContent = parseInt(totalLikesEl.textContent) + 1;
-                likeWrapper.setAttribute('data-liked', 'true');
+                likeWrapper.setAttribute("data-liked", "true");
             } else {
                 likeCount.textContent = currentLikes - 1;
                 totalLikesEl.textContent = parseInt(totalLikesEl.textContent) - 1;
-                likeWrapper.setAttribute('data-liked', 'false');
+                likeWrapper.setAttribute("data-liked", "false");
             }
         };
 
-likeIcon.addEventListener('click', toggleLike);
+likeIcon.addEventListener("click", toggleLike);
 
-likeIcon.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
+likeIcon.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
         e.preventDefault(); 
         toggleLike(e);
     }

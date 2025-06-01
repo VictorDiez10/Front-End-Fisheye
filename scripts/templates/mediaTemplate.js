@@ -9,14 +9,14 @@ export class MediaTemplate {
     }
 
     createMediaCard() {
-        throw new Error('Method createMediaCard() must be implemented');
+        throw new Error("Method createMediaCard() must be implemented");
     }
 }
 
 export class ImageMediaCard extends MediaTemplate {
     createMediaCard() {
-        const card = document.createElement('article');
-        card.className = 'card-all';
+        const card = document.createElement("article");
+        card.className = "card-all";
         card.innerHTML = `
                 <div class="card" data-index="">
                     <img src="./assets/images/${this.photographerName}/${this.media.image}" alt="${this.media.title}" class="card-img"  role="img">
@@ -37,8 +37,8 @@ export class ImageMediaCard extends MediaTemplate {
 
 export class VideoMediaCard extends MediaTemplate {
     createMediaCard() {
-        const card = document.createElement('article');
-        card.className = 'card-all';
+        const card = document.createElement("article");
+        card.className = "card-all";
         card.innerHTML = `
             <div class="card" data-index="">
                 <video controls class="card-video" tabindex="0" aria-label="${this.media.title}">

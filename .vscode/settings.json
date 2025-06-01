@@ -3,6 +3,10 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"]
+    "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"],
+    "eslint.rules": {
+        "semi": ["error", "always"],             
+        "quotes": ["error", "double"]             
+    }
 }
-    
+

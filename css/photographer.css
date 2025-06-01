@@ -255,3 +255,8 @@ form input {
     outline: 2px solid white;
 }
 
+.close {
+    border: none;
+    background: none;
+}
+

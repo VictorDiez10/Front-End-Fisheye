@@ -1,10 +1,50 @@
 const modal = document.getElementById("contact_modal");
 export function displayModal() {
-	modal.style.display = "block";
+	lastFocusedElement = document.activeElement;
+    modal.style.display = "block";
+    modal.setAttribute("aria-hidden", "false");
+
+    const firstInput = modal.querySelector("input, textarea, button, [tabindex]:not([tabindex='-1'])");
+    if (firstInput) firstInput.focus();
+
+    document.addEventListener("keydown", trapTabKey);
+    document.addEventListener("keydown", handleEscape);
 }
 
 export function closeModal() {
     modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+
+    if (lastFocusedElement) lastFocusedElement.focus();
+
+    document.removeEventListener("keydown", trapTabKey);
+    document.removeEventListener("keydown", handleEscape);
+}
+
+function handleEscape(e) {
+    if (e.key === "Escape") {
+        closeModal();
+    }
+}
+
+function trapTabKey(e) {
+    if (e.key !== "Tab") return;
+
+    const focusableElements = modal.querySelectorAll("input, textarea, button, [tabindex]:not([tabindex='-1'])");
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        }
+    } else { // Tab
+        if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+        }
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -31,6 +71,7 @@ let firstNameChecked;
 let lastChecked;
 let emailChecked;
 let textareaChecked;
+let lastFocusedElement;
 
 
 function validate() {
@@ -42,7 +83,7 @@ function validate() {
         firstNameChecked = true
         }
         
-        if(lastName.value.length < 2 || lastName.value === null || lastName.value === '') {
+        if(lastName.value.length < 2 || lastName.value === null || lastName.value === "") {
             setError(lastName, "Veuillez entrer 2 caractères ou plus pour le champ du nom.")
             lastChecked = false
         } else {
@@ -59,7 +100,7 @@ function validate() {
             emailChecked = true
         }
 
-        if(textarea.value.length < 15 || textarea.value === null || textarea.value === '') {
+        if(textarea.value.length < 15 || textarea.value === null || textarea.value === "") {
             setError(textarea, "Veuillez entrer 15 caractères ou plus pour le message.")
             textareaChecked = false
         } else {
@@ -79,8 +120,8 @@ function allSuccess () {
 
 const setError = (input, message) => {
     const formData = input.parentElement;
-    const small = formData.querySelector('small');
-    formData.className = 'formData error';
+    const small = formData.querySelector("small");
+    formData.className = "formData error";
     small.innerText = message;
 }
 
@@ -88,5 +129,5 @@ const setError = (input, message) => {
 
 function setSuccess(input) {
     const formData = input.parentElement;
-    formData.className = 'formData success';
+    formData.className = "formData success";
 }
